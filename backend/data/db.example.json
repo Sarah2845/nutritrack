@@ -1,0 +1,54 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "username": "utilisateur_test",
+      "email": "test@example.com",
+      "password": "$2a$10$XyMQrX9jm8GwAMT6LNjJeuQp2qS1i7YmJbLiR1U6J0CDsKGiNEpfe",
+      "createdAt": "2025-04-01T10:00:00.000Z"
+    }
+  ],
+  "meals": [
+    {
+      "id": "1",
+      "userId": "1",
+      "name": "Salade de poulet",
+      "description": "Salade avec poulet grillé, avocat et vinaigrette légère",
+      "calories": 350,
+      "proteins": 30,
+      "carbs": 15,
+      "fats": 20,
+      "date": "2025-04-01",
+      "mealType": "lunch",
+      "createdAt": "2025-04-01T12:30:00.000Z"
+    },
+    {
+      "id": "2",
+      "userId": "1",
+      "name": "Smoothie protéiné",
+      "description": "Banane, protéine whey, lait d'amande et beurre de cacahuète",
+      "calories": 280,
+      "proteins": 25,
+      "carbs": 30,
+      "fats": 10,
+      "date": "2025-04-01",
+      "mealType": "breakfast",
+      "createdAt": "2025-04-01T08:15:00.000Z"
+    }
+  ],
+  "goals": [
+    {
+      "id": "1",
+      "userId": "1",
+      "name": "Maintien de poids",
+      "calories": 2200,
+      "proteins": 130,
+      "carbs": 220,
+      "fats": 75,
+      "startDate": "2025-04-01",
+      "endDate": null,
+      "isActive": true,
+      "createdAt": "2025-04-01T09:00:00.000Z"
+    }
+  ]
+}

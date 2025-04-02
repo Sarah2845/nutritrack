@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Basique NutriTrack</title>
+    <script>
+        function testScripts() {
+            const results = document.getElementById('results');
+            results.innerHTML = '';
+            
+            // Liste des scripts à tester
+            const scripts = [
+                'js/utils.js',
+                'js/api.js',
+                'js/auth.js',
+                'js/dashboard.js',
+                'js/meals.js',
+                'js/goals.js',
+                'js/stats.js',
+                'js/profile.js',
+                'js/app.js'
+            ];
+            
+            scripts.forEach(scriptPath => {
+                const script = document.createElement('script');
+                script.src = scriptPath;
+                script.onload = () => {
+                    results.innerHTML += `<p class="success">✓ ${scriptPath} chargé avec succès</p>`;
+                };
+                script.onerror = () => {
+                    results.innerHTML += `<p class="error">✗ Échec du chargement de ${scriptPath}</p>`;
+                };
+                document.head.appendChild(script);
+            });
+        }
+    </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .success { color: green; }
+        .error { color: red; }
+        button {
+            padding: 10px 15px;
+            background-color: #4e73df;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Test de chargement des scripts NutriTrack</h1>
+    <p>Cette page permet de vérifier si les scripts JavaScript se chargent correctement.</p>
+    
+    <button onclick="testScripts()">Tester les scripts</button>
+    
+    <div id="results" style="margin-top: 20px;"></div>
+    
+    <h2>Autres tests</h2>
+    <div>
+        <h3>Test de communication API</h3>
+        <button onclick="testAPI()">Tester l'API</button>
+        <div id="apiResult"></div>
+    </div>
+    
+    <script>
+        function testAPI() {
+            const apiResult = document.getElementById('apiResult');
+            apiResult.innerHTML = 'Test en cours...';
+            
+            fetch('http://localhost:3001/api/auth')
+                .then(response => {
+                    if (response.ok) {
+                        return response.text();
+                    }
+                    throw new Error(`Erreur HTTP: ${response.status}`);
+                })
+                .then(data => {
+                    apiResult.innerHTML = `<p class="success">API accessible: ${data}</p>`;
+                })
+                .catch(error => {
+                    apiResult.innerHTML = `<p class="error">Erreur d'accès à l'API: ${error.message}</p>`;
+                });
+        }
+    </script>
+</body>
+</html>

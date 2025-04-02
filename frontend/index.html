@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NutriTrack - Suivi nutritionnel</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
+  <style>
+    body {
+      background-color: #f8f9fc;
+      font-family: 'Nunito', 'Segoe UI', sans-serif;
+    }
+    .auth-container {
+      max-width: 450px;
+      margin: 100px auto;
+      padding: 25px;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+    }
+    .auth-logo {
+      color: #4e73df;
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+    .btn-primary {
+      background-color: #4e73df;
+      border-color: #4e73df;
+    }
+    .btn-primary:hover {
+      background-color: #2e59d9;
+      border-color: #2e59d9;
+    }
+    .form-control:focus {
+      border-color: #bac8f3;
+      box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+    }
+    .nav-tabs .nav-link.active {
+      color: #4e73df;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container">
+        <a class="navbar-brand" href="#"><i class="bi bi-heart-pulse"></i> NutriTrack</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="#dashboard" data-page="dashboard">Tableau de bord</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#meals" data-page="meals">Repas</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#goals" data-page="goals">Objectifs</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#stats" data-page="stats">Statistiques</a>
+            </li>
+          </ul>
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" id="userDropdown">
+                <i class="bi bi-person-circle"></i> <span id="username">Utilisateur</span>
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#profile" data-page="profile">Profil</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="#" id="logoutBtn">Déconnexion</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container py-4">
+      <div id="pageContent">
+        <!-- Page content will be loaded here dynamically -->
+      </div>
+    </main>
+
+    <!-- Auth Forms (Login/Register) -->
+    <div class="auth-container" id="authContainer">
+      <div class="auth-card">
+        <div class="auth-header">
+          <h2><i class="bi bi-heart-pulse"></i> NutriTrack</h2>
+          <p>Suivi nutritionnel intelligent</p>
+        </div>
+        
+        <ul class="nav nav-tabs" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="login-tab" data-bs-toggle="tab" data-bs-target="#login" type="button" role="tab">Connexion</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="register-tab" data-bs-toggle="tab" data-bs-target="#register" type="button" role="tab">Inscription</button>
+          </li>
+        </ul>
+        
+        <div class="tab-content p-3">
+          <!-- Login Form -->
+          <div class="tab-pane fade show active" id="login" role="tabpanel">
+            <form id="loginForm" novalidate>
+              <div class="mb-3">
+                <label for="loginEmail" class="form-label">Email</label>
+                <input type="email" class="form-control" id="loginEmail" required>
+              </div>
+              <div class="mb-3">
+                <label for="loginPassword" class="form-label">Mot de passe</label>
+                <input type="password" class="form-control" id="loginPassword" required>
+              </div>
+              <div class="d-grid">
+                <button type="submit" class="btn btn-primary">Connexion</button>
+              </div>
+            </form>
+          </div>
+          
+          <!-- Register Form -->
+          <div class="tab-pane fade" id="register" role="tabpanel">
+            <form id="registerForm" novalidate>
+              <div class="mb-3">
+                <label for="registerUsername" class="form-label">Nom d'utilisateur</label>
+                <input type="text" class="form-control" id="registerUsername" required>
+              </div>
+              <div class="mb-3">
+                <label for="registerEmail" class="form-label">Email</label>
+                <input type="email" class="form-control" id="registerEmail" required>
+              </div>
+              <div class="mb-3">
+                <label for="registerPassword" class="form-label">Mot de passe</label>
+                <input type="password" class="form-control" id="registerPassword" required>
+              </div>
+              <div class="d-grid">
+                <button type="submit" class="btn btn-primary">S'inscrire</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notifications -->
+  <div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="toast-header">
+        <i class="bi bi-info-circle me-2"></i>
+        <strong class="me-auto" id="toastTitle">Notification</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+      <div class="toast-body" id="toastMessage">
+        Message de notification
+      </div>
+    </div>
+  </div>
+
+  <!-- Template for page content -->
+  <template id="dashboardTemplate">
+    <h1 class="mb-4">Tableau de bord</h1>
+    <div class="date-controls mb-4">
+      <div class="input-group">
+        <input type="date" class="form-control" id="currentDate">
+        <button class="btn btn-outline-secondary" id="previousDate">
+          <i class="bi bi-chevron-left"></i>
+        </button>
+        <button class="btn btn-outline-secondary" id="nextDate">
+          <i class="bi bi-chevron-right"></i>
+        </button>
+        <button class="btn btn-outline-primary" id="todayDate">Aujourd'hui</button>
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="col-md-8">
+        <div class="card mb-4">
+          <div class="card-header">
+            <h5>Progression des objectifs quotidiens</h5>
+          </div>
+          <div class="card-body">
+            <div id="goalProgress">
+              <!-- Goal progress bars will be rendered here -->
+            </div>
+          </div>
+        </div>
+        
+        <div class="card mb-4">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h5>Repas du jour</h5>
+            <button id="addMealBtn" class="btn btn-sm btn-primary">
+              <i class="bi bi-plus-circle"></i> Ajouter un repas
+            </button>
+          </div>
+          <div class="card-body">
+            <div id="todayMeals">
+              <!-- Today's meals will be listed here -->
+              <div class="text-center text-muted py-4" id="noMealsMessage">
+                <i class="bi bi-journal-x fs-2"></i>
+                <p>Aucun repas enregistré pour aujourd'hui</p>
+                <button class="btn btn-primary" id="quickAddMealBtn">Ajouter un repas</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-4">
+        <div class="card mb-4">
+          <div class="card-header">
+            <h5>Résumé nutritionnel</h5>
+          </div>
+          <div class="card-body">
+            <div id="nutritionSummary">
+              <!-- Nutrition summary will be shown here -->
+            </div>
+          </div>
+        </div>
+        
+        <div class="card mb-4">
+          <div class="card-header">
+            <h5>Recommandations</h5>
+          </div>
+          <div class="card-body">
+            <div id="recommendations">
+              <!-- Recommendations will be shown here -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <template id="mealsTemplate">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1>Mes repas</h1>
+      <button id="addMealBtn" class="btn btn-primary">
+        <i class="bi bi-plus-circle"></i> Nouveau repas
+      </button>
+    </div>
+    
+    <div class="card mb-4">
+      <div class="card-header">
+        <h5>Filtres</h5>
+      </div>
+      <div class="card-body">
+        <form id="mealFiltersForm" class="row g-3">
+          <div class="col-md-4">
+            <label for="startDate" class="form-label">Date début</label>
+            <input type="date" class="form-control" id="startDate">
+          </div>
+          <div class="col-md-4">
+            <label for="endDate" class="form-label">Date fin</label>
+            <input type="date" class="form-control" id="endDate">
+          </div>
+          <div class="col-md-4">
+            <label for="mealType" class="form-label">Type de repas</label>
+            <select class="form-select" id="mealType">
+              <option value="">Tous</option>
+              <option value="breakfast">Petit-déjeuner</option>
+              <option value="lunch">Déjeuner</option>
+              <option value="dinner">Dîner</option>
+              <option value="snack">Collation</option>
+              <option value="other">Autre</option>
+            </select>
+          </div>
+          <div class="col-12">
+            <button type="submit" class="btn btn-primary">Filtrer</button>
+            <button type="reset" class="btn btn-outline-secondary">Réinitialiser</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    
+    <div class="card">
+      <div class="card-header">
+        <h5>Liste des repas</h5>
+      </div>
+      <div class="card-body">
+        <div id="mealsList">
+          <!-- Meals list will be shown here -->
+        </div>
+      </div>
+    </div>
+    
+    <!-- Meal Modal -->
+    <div class="modal fade" id="mealModal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="mealModalTitle">Ajouter un repas</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form id="mealForm" novalidate>
+              <input type="hidden" id="mealId">
+              <div class="mb-3">
+                <label for="mealName" class="form-label">Nom du repas</label>
+                <input type="text" class="form-control" id="mealName" required>
+              </div>
+              <div class="mb-3">
+                <label for="mealDescription" class="form-label">Description</label>
+                <textarea class="form-control" id="mealDescription" rows="2"></textarea>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label for="mealDate" class="form-label">Date</label>
+                  <input type="date" class="form-control" id="mealDate" required>
+                </div>
+                <div class="col-md-6">
+                  <label for="mealTypeInput" class="form-label">Type de repas</label>
+                  <select class="form-select" id="mealTypeInput" required>
+                    <option value="breakfast">Petit-déjeuner</option>
+                    <option value="lunch">Déjeuner</option>
+                    <option value="dinner">Dîner</option>
+                    <option value="snack">Collation</option>
+                    <option value="other">Autre</option>
+                  </select>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label for="mealCalories" class="form-label">Calories (kcal)</label>
+                  <input type="number" class="form-control" id="mealCalories" min="0" required>
+                </div>
+                <div class="col-md-6">
+                  <label for="mealProteins" class="form-label">Protéines (g)</label>
+                  <input type="number" class="form-control" id="mealProteins" min="0" required>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label for="mealCarbs" class="form-label">Glucides (g)</label>
+                  <input type="number" class="form-control" id="mealCarbs" min="0" required>
+                </div>
+                <div class="col-md-6">
+                  <label for="mealFats" class="form-label">Lipides (g)</label>
+                  <input type="number" class="form-control" id="mealFats" min="0" required>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+            <button type="button" class="btn btn-primary" id="saveMealBtn">Enregistrer</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <template id="goalsTemplate">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1>Mes objectifs nutritionnels</h1>
+      <button id="addGoalBtn" class="btn btn-primary">
+        <i class="bi bi-plus-circle"></i> Nouvel objectif
+      </button>
+    </div>
+    
+    <div class="row">
+      <div class="col-md-6">
+        <div class="card mb-4">
+          <div class="card-header">
+            <h5>Objectif actif</h5>
+          </div>
+          <div class="card-body">
+            <div id="activeGoal">
+              <!-- Active goal will be shown here -->
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card mb-4">
+          <div class="card-header">
+            <h5>Progression journalière</h5>
+          </div>
+          <div class="card-body">
+            <div id="currentProgress">
+              <!-- Current progress will be shown here -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card">
+      <div class="card-header">
+        <h5>Historique des objectifs</h5>
+      </div>
+      <div class="card-body">
+        <div id="goalsList">
+          <!-- Goals list will be shown here -->
+        </div>
+      </div>
+    </div>
+    
+    <!-- Goal Modal -->
+    <div class="modal fade" id="goalModal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="goalModalTitle">Ajouter un objectif</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form id="goalForm" novalidate>
+              <input type="hidden" id="goalId">
+              <div class="mb-3">
+                <label for="goalName" class="form-label">Nom de l'objectif</label>
+                <input type="text" class="form-control" id="goalName" required>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label for="goalCalories" class="form-label">Calories (kcal/jour)</label>
+                  <input type="number" class="form-control" id="goalCalories" min="0" required>
+                </div>
+                <div class="col-md-6">
+                  <label for="goalProteins" class="form-label">Protéines (g/jour)</label>
+                  <input type="number" class="form-control" id="goalProteins" min="0" required>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label for="goalCarbs" class="form-label">Glucides (g/jour)</label>
+                  <input type="number" class="form-control" id="goalCarbs" min="0" required>
+                </div>
+                <div class="col-md-6">
+                  <label for="goalFats" class="form-label">Lipides (g/jour)</label>
+                  <input type="number" class="form-control" id="goalFats" min="0" required>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label for="goalStartDate" class="form-label">Date début</label>
+                  <input type="date" class="form-control" id="goalStartDate" required>
+                </div>
+                <div class="col-md-6">
+                  <label for="goalEndDate" class="form-label">Date fin (optionnel)</label>
+                  <input type="date" class="form-control" id="goalEndDate">
+                </div>
+              </div>
+              <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" id="goalIsActive" checked>
+                <label class="form-check-label" for="goalIsActive">
+                  Définir comme objectif actif
+                </label>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+            <button type="button" class="btn btn-primary" id="saveGoalBtn">Enregistrer</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <template id="statsTemplate">
+    <h1 class="mb-4">Statistiques et Analyses</h1>
+    
+    <div class="card mb-4">
+      <div class="card-header">
+        <h5>Tendances nutritionnelles</h5>
+      </div>
+      <div class="card-body">
+        <div class="mb-3">
+          <div class="input-group">
+            <span class="input-group-text">Période</span>
+            <input type="date" class="form-control" id="trendsStartDate">
+            <span class="input-group-text">à</span>
+            <input type="date" class="form-control" id="trendsEndDate">
+            <button class="btn btn-primary" id="loadTrendsBtn">Actualiser</button>
+          </div>
+        </div>
+        <div class="trends-charts">
+          <canvas id="caloriesChart"></canvas>
+          <canvas id="macrosChart"></canvas>
+        </div>
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="col-md-6">
+        <div class="card mb-4">
+          <div class="card-header">
+            <h5>Top repas riches en protéines</h5>
+          </div>
+          <div class="card-body">
+            <div id="topProteinMeals">
+              <!-- Top protein meals will be shown here -->
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card mb-4">
+          <div class="card-header">
+            <h5>Repas les plus équilibrés</h5>
+          </div>
+          <div class="card-body">
+            <div id="balancedMeals">
+              <!-- Most balanced meals will be shown here -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card mb-4">
+      <div class="card-header">
+        <h5>Résumé statistique</h5>
+      </div>
+      <div class="card-body">
+        <div id="statsCardContainer" class="row g-4">
+          <!-- Stats cards will be shown here -->
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <template id="profileTemplate">
+    <h1 class="mb-4">Mon profil</h1>
+    
+    <div class="row">
+      <div class="col-md-6">
+        <div class="card mb-4">
+          <div class="card-header">
+            <h5>Informations personnelles</h5>
+          </div>
+          <div class="card-body">
+            <form id="profileForm">
+              <div class="mb-3">
+                <label for="profileUsername" class="form-label">Nom d'utilisateur</label>
+                <input type="text" class="form-control" id="profileUsername" readonly>
+              </div>
+              <div class="mb-3">
+                <label for="profileEmail" class="form-label">Email</label>
+                <input type="email" class="form-control" id="profileEmail" readonly>
+              </div>
+              <div class="mb-3">
+                <label for="profileJoinDate" class="form-label">Membre depuis</label>
+                <input type="text" class="form-control" id="profileJoinDate" readonly>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-6">
+        <div class="card mb-4">
+          <div class="card-header">
+            <h5>Exporter mes données</h5>
+          </div>
+          <div class="card-body">
+            <p>Téléchargez toutes vos données nutritionnelles pour les sauvegarder ou les analyser dans d'autres outils.</p>
+            <div class="d-grid gap-2">
+              <button class="btn btn-primary" id="exportJsonBtn">
+                <i class="bi bi-file-earmark-arrow-down"></i> Exporter en JSON
+              </button>
+              <button class="btn btn-primary" id="exportCsvBtn">
+                <i class="bi bi-file-earmark-spreadsheet"></i> Exporter en CSV
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card mb-4">
+          <div class="card-header bg-danger text-white">
+            <h5>Zone de danger</h5>
+          </div>
+          <div class="card-body">
+            <p>Attention, cette action est irréversible.</p>
+            <div class="d-grid">
+              <button class="btn btn-outline-danger" id="deleteAccountBtn">
+                <i class="bi bi-trash"></i> Supprimer mon compte
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <!-- JavaScript files -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <!-- Chargement des scripts de l'application avec export global -->
+  <script>
+    // Fonction pour charger un script et s'assurer qu'il est globalement disponible
+    function loadScript(url, callback) {
+      const script = document.createElement('script');
+      script.type = 'text/javascript';
+      script.src = url;
+      
+      script.onload = function() {
+        console.log(`Script chargé: ${url}`);
+        if (callback) callback();
+      };
+      
+      script.onerror = function() {
+        console.error(`Erreur de chargement du script: ${url}`);
+      };
+      
+      document.head.appendChild(script);
+    }
+    
+    // Charger les scripts dans le bon ordre
+    window.onload = function() {
+      // Utilitaires en premier
+      loadScript('js/utils.js', function() {
+        console.log('Utils loaded:', window.Utils ? 'OK' : 'NON DISPONIBLE');
+        
+        // API ensuite
+        loadScript('js/api.js', function() {
+          console.log('API loaded:', window.API ? 'OK' : 'NON DISPONIBLE');
+          
+          // Auth après
+          loadScript('js/auth.js', function() {
+            console.log('Auth loaded:', window.Auth ? 'OK' : 'NON DISPONIBLE');
+            
+            // Composants
+            loadScript('js/dashboard.js', function() {
+              loadScript('js/meals.js', function() {
+                loadScript('js/goals.js', function() {
+                  loadScript('js/stats.js', function() {
+                    loadScript('js/profile.js', function() {
+                      // App en dernier
+                      loadScript('js/app.js', function() {
+                        console.log('App loaded:', window.App ? 'OK' : 'NON DISPONIBLE');
+                        
+                        // Initialiser l'application
+                        console.log('Initialisation de l\'application...');
+                        if (window.Auth && typeof window.Auth.init === 'function') {
+                          window.Auth.init();
+                          console.log('Auth.init() exécuté');
+                        }
+                        
+                        if (window.App && typeof window.App.init === 'function') {
+                          window.App.init();
+                          console.log('App.init() exécuté');
+                        }
+                      });
+                    });
+                  });
+                });
+              });
+            });
+          });
+        });
+      });
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Rédirection vers la page d'accueil ou l'application simplifiée
+    window.location.href = "/app";
+  </script>
+</body>
+</html>

@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NutriTrack - Suivi nutritionnel intelligent</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary-color: #4e73df;
+            --secondary-color: #1cc88a;
+            --accent-color: #f6c23e;
+            --dark-color: #5a5c69;
+            --light-color: #f8f9fc;
+        }
+        
+        body {
+            font-family: 'Nunito', 'Segoe UI', sans-serif;
+            color: #333;
+            background-color: var(--light-color);
+        }
+        
+        .navbar {
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+        }
+        
+        .hero {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #2e59d9 100%);
+            color: white;
+            padding: 5rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(to top right, white 49%, transparent 51%);
+        }
+        
+        .hero h1 {
+            font-weight: 700;
+            font-size: 3rem;
+        }
+        
+        .feature-icon {
+            background-color: var(--primary-color);
+            color: white;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem auto;
+        }
+        
+        .feature-icon i {
+            font-size: 2rem;
+        }
+        
+        .feature-card {
+            border-radius: 10px;
+            border: none;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .testimonial {
+            background-color: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+        }
+        
+        .cta-section {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 5rem 0;
+        }
+        
+        .btn-custom {
+            background-color: var(--secondary-color);
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 0.75rem 2rem;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-custom:hover {
+            background-color: #169e6c;
+            transform: translateY(-2px);
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+        
+        .btn-outline-custom {
+            border: 2px solid white;
+            color: white;
+            font-weight: 600;
+            padding: 0.75rem 2rem;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-outline-custom:hover {
+            background-color: white;
+            color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+        
+        .footer {
+            background-color: var(--dark-color);
+            color: #f8f9fc;
+            padding: 3rem 0;
+        }
+        
+        .footer a {
+            color: #f8f9fc;
+            text-decoration: none;
+        }
+        
+        .footer a:hover {
+            color: var(--accent-color);
+        }
+        
+        .nutrition-chart {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        .dashboard-preview {
+            border-radius: 10px;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease;
+        }
+        
+        .dashboard-preview:hover {
+            transform: scale(1.02);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="#"><i class="bi bi-heart-pulse"></i> NutriTrack</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#features">Fonctionnalités</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#how-it-works">Comment ça marche</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#testimonials">Témoignages</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/app">Se connecter</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-outline-light ms-2" href="/app">Essayer NutriTrack</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h1 class="mb-3">Suivez votre nutrition de manière intelligente</h1>
+                    <p class="lead mb-4">NutriTrack vous aide à suivre vos repas, atteindre vos objectifs nutritionnels et améliorer votre santé grâce à des analyses personnalisées.</p>
+                    <a href="/app" class="btn btn-custom btn-lg">Commencer maintenant</a>
+                    <a href="#features" class="btn btn-outline-custom btn-lg ms-2">En savoir plus</a>
+                </div>
+                <div class="col-lg-6">
+                    <img src="https://placehold.co/600x400/4e73df/ffffff?text=NutriTrack+Dashboard" alt="Dashboard Preview" class="img-fluid dashboard-preview">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-5" id="features">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold">Fonctionnalités principales</h2>
+                <p class="lead text-muted">Tout ce dont vous avez besoin pour un suivi nutritionnel efficace</p>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card h-100 feature-card">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon">
+                                <i class="bi bi-journal-plus"></i>
+                            </div>
+                            <h3 class="h4 card-title">Suivi des repas</h3>
+                            <p class="card-text">Enregistrez facilement vos repas avec des informations détaillées sur les nutriments : calories, protéines, glucides et lipides.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="card h-100 feature-card">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon">
+                                <i class="bi bi-graph-up"></i>
+                            </div>
+                            <h3 class="h4 card-title">Visualisation des données</h3>
+                            <p class="card-text">Consultez des graphiques dynamiques pour analyser vos habitudes alimentaires et suivre votre progression au fil du temps.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="card h-100 feature-card">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon">
+                                <i class="bi bi-trophy"></i>
+                            </div>
+                            <h3 class="h4 card-title">Objectifs personnalisés</h3>
+                            <p class="card-text">Définissez vos propres objectifs nutritionnels quotidiens et recevez des feedbacks sur votre progression.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="card h-100 feature-card">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon">
+                                <i class="bi bi-calendar-week"></i>
+                            </div>
+                            <h3 class="h4 card-title">Planification de menus</h3>
+                            <p class="card-text">Planifiez vos repas à l'avance et organisez votre semaine pour maintenir une alimentation équilibrée.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="card h-100 feature-card">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon">
+                                <i class="bi bi-lightbulb"></i>
+                            </div>
+                            <h3 class="h4 card-title">Recommandations</h3>
+                            <p class="card-text">Recevez des suggestions personnalisées basées sur vos habitudes et vos objectifs nutritionnels.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="card h-100 feature-card">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon">
+                                <i class="bi bi-people"></i>
+                            </div>
+                            <h3 class="h4 card-title">Profils multiples</h3>
+                            <p class="card-text">Gérez plusieurs profils utilisateurs pour toute la famille avec des paramètres et objectifs personnalisés.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="py-5 bg-light" id="how-it-works">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold">Comment ça marche</h2>
+                <p class="lead text-muted">Trois étapes simples pour améliorer votre nutrition</p>
+            </div>
+            
+            <div class="row align-items-center g-5">
+                <div class="col-lg-6 order-lg-2">
+                    <img src="https://placehold.co/600x400/1cc88a/ffffff?text=Tracking+Made+Easy" alt="Easy Tracking" class="img-fluid rounded shadow">
+                </div>
+                <div class="col-lg-6 order-lg-1">
+                    <div class="d-flex mb-4">
+                        <div class="me-4">
+                            <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                <h3 class="text-white mb-0">1</h3>
+                            </div>
+                        </div>
+                        <div>
+                            <h3>Enregistrez vos repas</h3>
+                            <p class="text-muted">Ajoutez facilement vos repas dans l'application. Recherchez des aliments dans notre base de données ou créez vos propres repas personnalisés.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row align-items-center g-5 mt-3">
+                <div class="col-lg-6">
+                    <img src="https://placehold.co/600x400/f6c23e/ffffff?text=Set+Your+Goals" alt="Set Goals" class="img-fluid rounded shadow">
+                </div>
+                <div class="col-lg-6">
+                    <div class="d-flex mb-4">
+                        <div class="me-4">
+                            <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                <h3 class="text-white mb-0">2</h3>
+                            </div>
+                        </div>
+                        <div>
+                            <h3>Définissez vos objectifs</h3>
+                            <p class="text-muted">Établissez des objectifs nutritionnels personnalisés en fonction de vos besoins spécifiques et de vos objectifs de santé.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row align-items-center g-5 mt-3">
+                <div class="col-lg-6 order-lg-2">
+                    <img src="https://placehold.co/600x400/4e73df/ffffff?text=Track+Progress" alt="Track Progress" class="img-fluid rounded shadow">
+                </div>
+                <div class="col-lg-6 order-lg-1">
+                    <div class="d-flex mb-4">
+                        <div class="me-4">
+                            <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                <h3 class="text-white mb-0">3</h3>
+                            </div>
+                        </div>
+                        <div>
+                            <h3>Suivez votre progression</h3>
+                            <p class="text-muted">Visualisez votre progression grâce à des graphiques intuitifs et des analyses détaillées de vos habitudes alimentaires.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Testimonials Section -->
+    <section class="py-5" id="testimonials">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold">Ce que disent nos utilisateurs</h2>
+                <p class="lead text-muted">Découvrez comment NutriTrack a aidé d'autres personnes</p>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <div class="testimonial">
+                        <div class="mb-3">
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-fill text-warning"></i>
+                        </div>
+                        <p class="mb-3">"Grâce à NutriTrack, j'ai pu perdre 10 kg en 3 mois en suivant simplement mes apports nutritionnels. L'interface est intuitive et les graphiques m'aident vraiment à rester motivée."</p>
+                        <div class="d-flex align-items-center">
+                            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                                <span>SM</span>
+                            </div>
+                            <div>
+                                <h5 class="mb-0">Sophie Martin</h5>
+                                <p class="text-muted mb-0">Utilisatrice depuis 6 mois</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4">
+                    <div class="testimonial">
+                        <div class="mb-3">
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-fill text-warning"></i>
+                        </div>
+                        <p class="mb-3">"En tant que sportif, NutriTrack m'aide à m'assurer que je consomme suffisamment de protéines pour soutenir mes entraînements. La planification des menus est une fonctionnalité que j'utilise quotidiennement."</p>
+                        <div class="d-flex align-items-center">
+                            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                                <span>TD</span>
+                            </div>
+                            <div>
+                                <h5 class="mb-0">Thomas Durand</h5>
+                                <p class="text-muted mb-0">Utilisateur depuis 1 an</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4">
+                    <div class="testimonial">
+                        <div class="mb-3">
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-half text-warning"></i>
+                        </div>
+                        <p class="mb-3">"J'utilise NutriTrack pour toute ma famille. C'est génial de pouvoir gérer plusieurs profils et d'adapter les objectifs pour chacun. Les recommandations sont vraiment pertinentes."</p>
+                        <div class="d-flex align-items-center">
+                            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                                <span>LB</span>
+                            </div>
+                            <div>
+                                <h5 class="mb-0">Laure Bernard</h5>
+                                <p class="text-muted mb-0">Utilisatrice depuis 9 mois</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container text-center">
+            <h2 class="mb-4 fw-bold">Prêt à transformer votre nutrition ?</h2>
+            <p class="lead mb-4">Rejoignez des milliers d'utilisateurs qui ont déjà amélioré leurs habitudes alimentaires grâce à NutriTrack.</p>
+            <a href="/app" class="btn btn-lg btn-custom">Commencer gratuitement</a>
+            <p class="mt-3 small">Aucune carte de crédit requise. Essai gratuit de 14 jours.</p>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <h5><i class="bi bi-heart-pulse"></i> NutriTrack</h5>
+                    <p>Votre partenaire pour une alimentation équilibrée et une vie saine.</p>
+                    <div class="social-links">
+                        <a href="#" class="me-2"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="me-2"><i class="bi bi-twitter"></i></a>
+                        <a href="#" class="me-2"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="me-2"><i class="bi bi-linkedin"></i></a>
+                    </div>
+                </div>
+                
+                <div class="col-lg-2">
+                    <h5>Produit</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#features">Fonctionnalités</a></li>
+                        <li><a href="#how-it-works">Comment ça marche</a></li>
+                        <li><a href="#testimonials">Témoignages</a></li>
+                        <li><a href="#">Tarifs</a></li>
+                        <li><a href="#">FAQ</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-lg-2">
+                    <h5>Entreprise</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#">À propos</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Carrières</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-lg-4">
+                    <h5>Restez informé</h5>
+                    <p>Abonnez-vous à notre newsletter pour recevoir les dernières mises à jour et conseils nutritionnels.</p>
+                    <form class="mt-3">
+                        <div class="input-group">
+                            <input type="email" class="form-control" placeholder="Votre email">
+                            <button class="btn btn-custom" type="submit">S'abonner</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <hr class="mt-4 mb-4">
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="mb-md-0">&copy; 2025 NutriTrack. Tous droits réservés.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <a href="#" class="me-3">Conditions d'utilisation</a>
+                    <a href="#">Politique de confidentialité</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

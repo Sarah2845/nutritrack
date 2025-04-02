@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test des modules NutriTrack</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            padding: 20px;
+        }
+        .success { color: green; }
+        .error { color: red; }
+        .module {
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        pre {
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 5px;
+            overflow: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Test des modules NutriTrack</h1>
+    <p>Cette page vérifie si tous les modules JavaScript de NutriTrack se chargent correctement.</p>
+    
+    <button id="runTests">Exécuter les tests</button>
+    <div id="results"></div>
+
+    <!-- Charger les dépendances externes -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ramda@0.29.0/dist/ramda.min.js"></script>
+    
+    <!-- Charger les modules de l'application -->
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script src="js/meals.js"></script>
+    <script src="js/goals.js"></script>
+    <script src="js/stats.js"></script>
+    <script src="js/profile.js"></script>
+    <script src="js/app.js"></script>
+    
+    <script>
+        document.getElementById('runTests').addEventListener('click', function() {
+            const results = document.getElementById('results');
+            results.innerHTML = '';
+            
+            // Liste des modules à tester
+            const modules = [
+                { name: 'API', obj: window.API },
+                { name: 'Auth', obj: window.Auth },
+                { name: 'App', obj: window.App },
+                { name: 'Utils', obj: window.Utils },
+                { name: 'Dashboard', obj: window.Dashboard },
+                { name: 'Meals', obj: window.Meals },
+                { name: 'Goals', obj: window.Goals },
+                { name: 'Stats', obj: window.Stats },
+                { name: 'Profile', obj: window.Profile }
+            ];
+            
+            // Tester chaque module
+            modules.forEach(module => {
+                const moduleDiv = document.createElement('div');
+                moduleDiv.className = 'module';
+                
+                if (module.obj) {
+                    moduleDiv.innerHTML = `
+                        <h3 class="success">${module.name}: Chargé ✓</h3>
+                        <p>Méthodes disponibles:</p>
+                        <pre>${Object.keys(module.obj).join(', ')}</pre>
+                    `;
+                    
+                    // Tester l'initialisation si disponible
+                    if (typeof module.obj.init === 'function') {
+                        try {
+                            const result = module.obj.init();
+                            moduleDiv.innerHTML += `<p class="success">Initialisation: Réussie</p>`;
+                        } catch (error) {
+                            moduleDiv.innerHTML += `
+                                <p class="error">Initialisation: Échec</p>
+                                <pre class="error">${error.message}</pre>
+                            `;
+                        }
+                    }
+                } else {
+                    moduleDiv.innerHTML = `<h3 class="error">${module.name}: Non chargé ✗</h3>`;
+                }
+                
+                results.appendChild(moduleDiv);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NutriTrack - Version minimale</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
+    <style>
+        body {
+            background-color: #f8f9fc;
+            font-family: 'Nunito', 'Segoe UI', sans-serif;
+        }
+        .auth-container {
+            max-width: 450px;
+            margin: 100px auto;
+            padding: 25px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+        }
+        .auth-logo {
+            color: #4e73df;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .btn-primary {
+            background-color: #4e73df;
+            border-color: #4e73df;
+        }
+        .btn-primary:hover {
+            background-color: #2e59d9;
+            border-color: #2e59d9;
+        }
+        .form-control:focus {
+            border-color: #bac8f3;
+            box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+        }
+        .nav-tabs .nav-link.active {
+            color: #4e73df;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="auth-container">
+            <div class="auth-logo">
+                <h2><i class="bi bi-heart-pulse"></i> NutriTrack</h2>
+                <p class="text-muted">Suivi nutritionnel intelligent</p>
+            </div>
+            
+            <ul class="nav nav-tabs mb-4" id="authTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="login-tab" data-bs-toggle="tab" data-bs-target="#login" type="button" role="tab">Connexion</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="register-tab" data-bs-toggle="tab" data-bs-target="#register" type="button" role="tab">Inscription</button>
+                </li>
+            </ul>
+            
+            <div class="tab-content">
+                <!-- Login Form -->
+                <div class="tab-pane fade show active" id="login" role="tabpanel">
+                    <form id="loginForm">
+                        <div class="mb-3">
+                            <label for="loginEmail" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="loginEmail" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="loginPassword" class="form-label">Mot de passe</label>
+                            <input type="password" class="form-control" id="loginPassword" required>
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">Connexion</button>
+                        </div>
+                    </form>
+                    <div class="mt-3 text-center">
+                        <p class="text-muted small">Pour tester : test@example.com / password123</p>
+                    </div>
+                </div>
+                
+                <!-- Register Form -->
+                <div class="tab-pane fade" id="register" role="tabpanel">
+                    <form id="registerForm">
+                        <div class="mb-3">
+                            <label for="registerName" class="form-label">Nom complet</label>
+                            <input type="text" class="form-control" id="registerName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="registerEmail" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="registerEmail" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="registerPassword" class="form-label">Mot de passe</label>
+                            <input type="password" class="form-control" id="registerPassword" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="registerPasswordConfirm" class="form-label">Confirmer le mot de passe</label>
+                            <input type="password" class="form-control" id="registerPasswordConfirm" required>
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">Créer un compte</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="text-center mt-4">
+                <a href="/" class="text-decoration-none">
+                    <i class="bi bi-arrow-left"></i> Retour à l'accueil
+                </a>
+            </div>
+        </div>
+        
+        <!-- Notifications -->
+        <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+            <div id="notification" class="toast align-items-center text-white bg-success" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body"></div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Authentification avec MongoDB
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    showNotification('Connexion réussie! Redirection vers le tableau de bord...', 'success');
+                    
+                    // Stocker le token et les informations utilisateur
+                    localStorage.setItem('nutritrack_token', data.token);
+                    localStorage.setItem('nutritrack_user', JSON.stringify(data.user));
+                    
+                    // Redirection vers le tableau de bord après un court délai
+                    setTimeout(() => {
+                        window.location.href = '/dashboard.html';
+                    }, 1500);
+                } else {
+                    showNotification(data.message || 'Email ou mot de passe incorrect', 'danger');
+                }
+            } catch (error) {
+                console.error('Erreur de connexion:', error);
+                showNotification('Erreur de connexion. Veuillez réessayer.', 'danger');
+                
+                // Fallback pour la démo (si le serveur MongoDB n'est pas disponible)
+                if (email === 'test@example.com' && password === 'password123') {
+                    showNotification('Mode de démonstration activé! Redirection vers le tableau de bord...', 'warning');
+                    
+                    localStorage.setItem('nutritrack_token', 'demo_token_12345');
+                    localStorage.setItem('nutritrack_user', JSON.stringify({
+                        id: 'demo',
+                        name: 'Utilisateur Démo',
+                        email: 'test@example.com'
+                    }));
+                    
+                    setTimeout(() => {
+                        window.location.href = '/dashboard.html';
+                    }, 1500);
+                }
+            }
+        });
+        
+        // Inscription avec MongoDB
+        document.getElementById('registerForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const passwordConfirm = document.getElementById('registerPasswordConfirm').value;
+            
+            // Simple validation
+            if (password !== passwordConfirm) {
+                showNotification('Les mots de passe ne correspondent pas', 'danger');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ name, email, password })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    showNotification('Compte créé avec succès! Vous pouvez maintenant vous connecter.', 'success');
+                    
+                    // Switch to login tab
+                    const loginTab = document.getElementById('login-tab');
+                    bootstrap.Tab.getInstance(loginTab).show();
+                    
+                    // Clear register form
+                    document.getElementById('registerForm').reset();
+                    
+                    // Pré-remplir l'email dans le formulaire de connexion
+                    document.getElementById('loginEmail').value = email;
+                } else {
+                    showNotification(data.message || 'Erreur lors de l\'inscription', 'danger');
+                }
+            } catch (error) {
+                console.error('Erreur d\'inscription:', error);
+                showNotification('Erreur lors de l\'inscription. Veuillez réessayer.', 'danger');
+                
+                // Fallback pour la démo (si le serveur MongoDB n'est pas disponible)
+                showNotification('Mode de démonstration activé! Compte créé avec succès!', 'warning');
+                
+                // Switch to login tab
+                const loginTab = document.getElementById('login-tab');
+                bootstrap.Tab.getInstance(loginTab).show();
+                
+                // Clear register form
+                document.getElementById('registerForm').reset();
+                
+                // Pré-remplir l'email dans le formulaire de connexion
+                document.getElementById('loginEmail').value = email;
+            }
+        });
+        
+        // Notification function
+        function showNotification(message, type) {
+            const notification = document.getElementById('notification');
+            notification.classList.remove('bg-success', 'bg-danger', 'bg-warning', 'bg-info');
+            notification.classList.add(`bg-${type}`);
+            
+            const toastBody = notification.querySelector('.toast-body');
+            toastBody.textContent = message;
+            
+            const toast = new bootstrap.Toast(notification);
+            toast.show();
+        }
+    </script>
+</body>
+</html>

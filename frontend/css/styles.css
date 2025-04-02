@@ -1,0 +1,401 @@
+/* General Styles */
+:root {
+  --primary-color: #4e73df;
+  --secondary-color: #6fd1bd;
+  --success-color: #1cc88a;
+  --info-color: #36b9cc;
+  --warning-color: #f6c23e;
+  --danger-color: #e74a3b;
+  --light-color: #f8f9fc;
+  --dark-color: #5a5c69;
+  --body-font: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+body {
+  font-family: var(--body-font);
+  background-color: #f8f9fc;
+}
+
+/* App Container */
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Navigation */
+.navbar-brand {
+  font-weight: 700;
+  font-size: 1.5rem;
+}
+
+/* Card styling */
+.card {
+  border-radius: 0.5rem;
+  border: none;
+  box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+  margin-bottom: 1.5rem;
+}
+
+.card-header {
+  background-color: #fff;
+  border-bottom: 1px solid #e3e6f0;
+  padding: 1rem 1.25rem;
+}
+
+.card-header h5 {
+  margin-bottom: 0;
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+/* Authentication styles */
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: var(--primary-color);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  transition: transform 0.3s ease;
+}
+
+.auth-container.hidden {
+  transform: translateY(-100vh);
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 450px;
+  background-color: #fff;
+  border-radius: 0.5rem;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  padding: 0;
+  overflow: hidden;
+}
+
+.auth-header {
+  background-color: var(--primary-color);
+  color: white;
+  text-align: center;
+  padding: 2rem;
+}
+
+.auth-header h2 {
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+}
+
+/* Progress Bar Styling */
+.progress {
+  height: 1.5rem;
+  font-size: 0.85rem;
+  background-color: #eaecf4;
+  border-radius: 0.35rem;
+  margin-bottom: 1rem;
+}
+
+.nutrition-stat {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.nutrition-stat-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 1rem;
+  flex-shrink: 0;
+}
+
+.calories-icon {
+  background-color: rgba(78, 115, 223, 0.2);
+  color: var(--primary-color);
+}
+
+.proteins-icon {
+  background-color: rgba(28, 200, 138, 0.2);
+  color: var(--success-color);
+}
+
+.carbs-icon {
+  background-color: rgba(246, 194, 62, 0.2);
+  color: var(--warning-color);
+}
+
+.fats-icon {
+  background-color: rgba(231, 74, 59, 0.2);
+  color: var(--danger-color);
+}
+
+.nutrition-stat-content {
+  flex-grow: 1;
+}
+
+.nutrition-stat-label {
+  font-size: 0.8rem;
+  color: #858796;
+  margin-bottom: 0.25rem;
+}
+
+.nutrition-stat-value {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+/* Meal Card Styling */
+.meal-card {
+  border-left: 0.25rem solid var(--primary-color);
+  transition: transform 0.15s ease;
+}
+
+.meal-card:hover {
+  transform: translateY(-2px);
+}
+
+.meal-card.breakfast {
+  border-left-color: var(--info-color);
+}
+
+.meal-card.lunch {
+  border-left-color: var(--warning-color);
+}
+
+.meal-card.dinner {
+  border-left-color: var(--primary-color);
+}
+
+.meal-card.snack {
+  border-left-color: var(--success-color);
+}
+
+.meal-card.other {
+  border-left-color: var(--secondary-color);
+}
+
+.meal-card .meal-time {
+  font-size: 0.8rem;
+  color: #858796;
+}
+
+.meal-card .meal-name {
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 0.25rem;
+}
+
+.meal-card .meal-macros {
+  display: flex;
+  margin-top: 0.5rem;
+  color: #858796;
+  font-size: 0.85rem;
+}
+
+.meal-card .meal-macros div {
+  margin-right: 1rem;
+}
+
+.meal-card .meal-macros strong {
+  color: var(--dark-color);
+}
+
+/* Goal Card Styling */
+.goal-card {
+  border-left: 0.25rem solid var(--success-color);
+}
+
+.goal-card.inactive {
+  border-left-color: #d1d3e2;
+}
+
+.goal-card .goal-dates {
+  font-size: 0.8rem;
+  color: #858796;
+}
+
+.goal-card .goal-name {
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 0.25rem;
+}
+
+.goal-card .goal-macros {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+}
+
+.goal-card .goal-macros div {
+  margin-right: 1.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.goal-card .goal-macros span {
+  font-size: 0.8rem;
+  color: #858796;
+  display: block;
+}
+
+.goal-card .goal-macros strong {
+  font-size: 1rem;
+  color: var(--dark-color);
+}
+
+/* Chart Container */
+.chart-container {
+  position: relative;
+  height: 300px;
+  margin-bottom: 1.5rem;
+}
+
+/* Stats Card */
+.stat-card {
+  text-align: center;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+  background-color: white;
+}
+
+.stat-card .stat-icon {
+  height: 3rem;
+  width: 3rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+  font-size: 1.5rem;
+}
+
+.stat-card .stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--dark-color);
+}
+
+.stat-card .stat-label {
+  font-size: 0.9rem;
+  color: #858796;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .nutrition-stat {
+    margin-bottom: 0.75rem;
+  }
+  
+  .nutrition-stat-icon {
+    width: 30px;
+    height: 30px;
+    font-size: 0.8rem;
+  }
+  
+  .nutrition-stat-value {
+    font-size: 1rem;
+  }
+  
+  .card-header h5 {
+    font-size: 1rem;
+  }
+  
+  .meal-card .meal-macros {
+    flex-wrap: wrap;
+  }
+  
+  .meal-card .meal-macros div {
+    margin-bottom: 0.25rem;
+    margin-right: 0.75rem;
+  }
+}
+
+/* Animation for page transitions */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+#pageContent {
+  animation: fadeIn 0.3s ease;
+}
+
+/* Toast notification custom styling */
+.toast {
+  background-color: white;
+  border-left: 4px solid var(--primary-color);
+}
+
+.toast.error {
+  border-left-color: var(--danger-color);
+}
+
+.toast.success {
+  border-left-color: var(--success-color);
+}
+
+/* Recommendation styling */
+.recommendation-item {
+  padding: 0.75rem;
+  border-radius: 0.35rem;
+  background-color: rgba(78, 115, 223, 0.05);
+  margin-bottom: 0.75rem;
+  border-left: 0.25rem solid var(--primary-color);
+}
+
+.recommendation-item:last-child {
+  margin-bottom: 0;
+}
+
+.recommendation-name {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.recommendation-macros {
+  display: flex;
+  font-size: 0.8rem;
+  color: #858796;
+}
+
+.recommendation-macros div {
+  margin-right: 1rem;
+}
+
+/* Loading spinner */
+.spinner-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1050;
+}
+
+.spinner-container {
+  text-align: center;
+}
+
+.spinner-border {
+  width: 3rem;
+  height: 3rem;
+}
+
+.spinner-message {
+  margin-top: 1rem;
+  font-weight: 600;
+  color: var(--primary-color);
+}

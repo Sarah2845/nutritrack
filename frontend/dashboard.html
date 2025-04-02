@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NutriTrack - Tableau de bord</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
+    <style>
+        body {
+            background-color: #f8f9fc;
+            font-family: 'Nunito', 'Segoe UI', sans-serif;
+            padding-top: 56px;
+        }
+        .sidebar {
+            position: fixed;
+            top: 56px;
+            left: 0;
+            width: 225px;
+            height: calc(100vh - 56px);
+            background-color: #4e73df;
+            background-image: linear-gradient(180deg, #4e73df 10%, #224abe 100%);
+            padding-top: 20px;
+            z-index: 1;
+        }
+        .sidebar-link {
+            display: block;
+            padding: 10px 15px;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            border-left: 3px solid transparent;
+        }
+        .sidebar-link:hover, .sidebar-link.active {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-left-color: white;
+        }
+        .sidebar-link i {
+            margin-right: 10px;
+        }
+        .content {
+            margin-left: 225px;
+            padding: 20px;
+        }
+        .card {
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+            border: none;
+            border-radius: 0.35rem;
+            margin-bottom: 20px;
+        }
+        .card-header {
+            background-color: #f8f9fc;
+            border-bottom: 1px solid #e3e6f0;
+            font-weight: bold;
+            color: #5a5c69;
+        }
+        .progress {
+            height: 10px;
+        }
+        .stat-card {
+            padding: 20px;
+            text-align: center;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+            transition: transform 0.3s ease;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px auto;
+            font-size: 24px;
+        }
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .calories-icon { background-color: #4e73df; color: white; }
+        .protein-icon { background-color: #1cc88a; color: white; }
+        .carbs-icon { background-color: #36b9cc; color: white; }
+        .fat-icon { background-color: #f6c23e; color: white; }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#"><i class="bi bi-heart-pulse"></i> NutriTrack</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle"></i> <span id="username">Utilisateur Test</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="/profile.html"><i class="bi bi-person"></i> Profil</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-gear"></i> Paramètres</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" id="logoutBtn"><i class="bi bi-box-arrow-right"></i> Déconnexion</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="px-3 mb-4 text-white">
+            <div class="text-center mb-3">
+                <img src="https://via.placeholder.com/80" id="sidebarAvatar" alt="Photo de profil" class="rounded-circle border border-3 border-white" style="width: 80px; height: 80px; object-fit: cover;">
+            </div>
+            <div class="text-center">
+                <h6 class="mb-0" id="sidebarUsername">Utilisateur Test</h6>
+                <div class="text-white-50 small">Membre depuis Avril 2025</div>
+            </div>
+        </div>
+        <a href="/dashboard.html" class="sidebar-link active"><i class="bi bi-speedometer2"></i> Tableau de bord</a>
+        <a href="#" class="sidebar-link"><i class="bi bi-journal-plus"></i> Repas</a>
+        <a href="#" class="sidebar-link"><i class="bi bi-trophy"></i> Objectifs</a>
+        <a href="#" class="sidebar-link"><i class="bi bi-graph-up"></i> Statistiques</a>
+        <a href="/profile.html" class="sidebar-link"><i class="bi bi-person"></i> Profil</a>
+        <hr class="sidebar-divider bg-white mx-3 opacity-25">
+        <a href="/" class="sidebar-link"><i class="bi bi-house"></i> Accueil</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content">
+        <div class="container-fluid">
+            <h1 class="h3 mb-4 text-gray-800">Tableau de bord</h1>
+
+            <div class="row mb-4">
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="stat-card">
+                        <div class="stat-icon calories-icon">
+                            <i class="bi bi-fire"></i>
+                        </div>
+                        <div class="text-muted">Calories</div>
+                        <div class="stat-value">1,850</div>
+                        <div class="progress mb-2">
+                            <div class="progress-bar bg-primary" role="progressbar" style="width: 75%"></div>
+                        </div>
+                        <div class="text-muted small">75% de votre objectif quotidien</div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="stat-card">
+                        <div class="stat-icon protein-icon">
+                            <i class="bi bi-egg-fried"></i>
+                        </div>
+                        <div class="text-muted">Protéines</div>
+                        <div class="stat-value">95g</div>
+                        <div class="progress mb-2">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: 85%"></div>
+                        </div>
+                        <div class="text-muted small">85% de votre objectif quotidien</div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="stat-card">
+                        <div class="stat-icon carbs-icon">
+                            <i class="bi bi-circle"></i>
+                        </div>
+                        <div class="text-muted">Glucides</div>
+                        <div class="stat-value">210g</div>
+                        <div class="progress mb-2">
+                            <div class="progress-bar bg-info" role="progressbar" style="width: 70%"></div>
+                        </div>
+                        <div class="text-muted small">70% de votre objectif quotidien</div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="stat-card">
+                        <div class="stat-icon fat-icon">
+                            <i class="bi bi-droplet"></i>
+                        </div>
+                        <div class="text-muted">Lipides</div>
+                        <div class="stat-value">65g</div>
+                        <div class="progress mb-2">
+                            <div class="progress-bar bg-warning" role="progressbar" style="width: 80%"></div>
+                        </div>
+                        <div class="text-muted small">80% de votre objectif quotidien</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <i class="bi bi-graph-up me-1"></i> Apport nutritionnel des 7 derniers jours
+                        </div>
+                        <div class="card-body">
+                            <canvas id="weeklyChart" height="300"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <i class="bi bi-journal-plus me-1"></i> Repas d'aujourd'hui
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-group">
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Petit-déjeuner: Omelette aux légumes
+                                    <span class="badge bg-primary rounded-pill">350 cal</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Déjeuner: Salade de poulet
+                                    <span class="badge bg-primary rounded-pill">580 cal</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Collation: Yaourt et fruits
+                                    <span class="badge bg-primary rounded-pill">220 cal</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Dîner: Saumon et légumes
+                                    <span class="badge bg-primary rounded-pill">700 cal</span>
+                                </li>
+                            </ul>
+                            <div class="d-grid mt-3">
+                                <button class="btn btn-primary btn-sm">
+                                    <i class="bi bi-plus-circle"></i> Ajouter un repas
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="bi bi-trophy me-1"></i> Objectifs nutritionnels
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label">Calories: 2500 cal</label>
+                                <div class="progress">
+                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 75%"></div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Protéines: 110g</label>
+                                <div class="progress">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 85%"></div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Glucides: 300g</label>
+                                <div class="progress">
+                                    <div class="progress-bar bg-info" role="progressbar" style="width: 70%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="form-label">Lipides: 80g</label>
+                                <div class="progress">
+                                    <div class="progress-bar bg-warning" role="progressbar" style="width: 80%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notifications -->
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+        <div id="notification" class="toast align-items-center text-white bg-success" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body"></div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Check if user is logged in
+        document.addEventListener('DOMContentLoaded', function() {
+            const token = localStorage.getItem('nutritrack_token');
+            const user = JSON.parse(localStorage.getItem('nutritrack_user') || '{}');
+            
+            if (!token) {
+                // Redirect to login if not authenticated
+                window.location.href = '/app-minimal.html';
+                return;
+            }
+            
+            // Update username display
+            if (user.name) {
+                document.getElementById('username').textContent = user.name;
+                document.getElementById('sidebarUsername').textContent = user.name;
+            }
+            
+            // Update avatar display
+            updateUserAvatar(user);
+            
+            // Logout handler
+            document.getElementById('logoutBtn').addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Clear auth data
+                localStorage.removeItem('nutritrack_token');
+                localStorage.removeItem('nutritrack_user');
+                
+                // Show notification
+                showNotification('Déconnexion réussie', 'success');
+                
+                // Redirect to login after a short delay
+                setTimeout(() => {
+                    window.location.href = '/app-minimal.html';
+                }, 1500);
+            });
+            
+            // Initialize weekly chart
+            const ctx = document.getElementById('weeklyChart').getContext('2d');
+            const weeklyChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'],
+                    datasets: [
+                        {
+                            label: 'Calories',
+                            data: [1750, 1920, 1840, 2100, 1950, 2300, 1850],
+                            borderColor: '#4e73df',
+                            backgroundColor: 'rgba(78, 115, 223, 0.1)',
+                            tension: 0.3,
+                            fill: true
+                        },
+                        {
+                            label: 'Protéines',
+                            data: [85, 92, 88, 105, 98, 110, 95],
+                            borderColor: '#1cc88a',
+                            backgroundColor: 'rgba(28, 200, 138, 0.1)',
+                            tension: 0.3,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        });
+        
+        // Notification function
+        function showNotification(message, type) {
+            const notification = document.getElementById('notification');
+            notification.classList.remove('bg-success', 'bg-danger', 'bg-warning', 'bg-info');
+            notification.classList.add(`bg-${type}`);
+            
+            const toastBody = notification.querySelector('.toast-body');
+            toastBody.textContent = message;
+            
+            const toast = new bootstrap.Toast(notification);
+            toast.show();
+        }
+        
+        // Fonction pour mettre à jour l'avatar de l'utilisateur
+        function updateUserAvatar(userData) {
+            const avatarElement = document.getElementById('sidebarAvatar');
+            if (avatarElement) {
+                // Utiliser l'avatar stocké dans les données utilisateur ou une image par défaut
+                const avatarUrl = userData.avatar || getGravatarUrl(userData.email) || 'https://via.placeholder.com/80';
+                avatarElement.src = avatarUrl;
+            }
+        }
+        
+        // Obtenir un avatar Gravatar basé sur l'email
+        function getGravatarUrl(email) {
+            if (!email) return null;
+            
+            // Version simplifiée pour la démo
+            return `https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y`;
+        }
+    </script>
+</body>
+</html>
