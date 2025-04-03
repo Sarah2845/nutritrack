@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  nutritrack:
+    build: .
+    container_name: nutritrack-app
+    ports:
+      - "3001:3001"
+    volumes:
+      # Permet de persister les données JSON entre redémarrages
+      - ./backend/data:/app/backend/data
+    environment:
+      - NODE_ENV=production
+      - DB_TYPE=local
+    restart: unless-stopped
