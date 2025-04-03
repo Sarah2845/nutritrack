@@ -2,11 +2,15 @@
   "name": "nutritrack",
   "version": "1.0.0",
   "description": "Application de suivi nutritionnel avec principes de programmation fonctionnelle",
-  "main": "backend/src/server.js",
+  "main": "backend/local-server.js",
   "scripts": {
-    "start": "node backend/src/server.js",
-    "dev": "nodemon backend/src/server.js",
-    "test": "jest"
+    "start": "node backend/local-server.js",
+    "start:local": "node backend/start-local.js",
+    "start:mongodb": "node backend/start-mongodb.js",
+    "dev": "nodemon backend/local-server.js",
+    "test": "jest",
+    "docker:build": "docker build -t nutritrack .",
+    "docker:run": "docker run -p 3001:3001 nutritrack"
   },
   "keywords": [
     "nutrition",
