@@ -5,18 +5,33 @@
  * en configurant les variables d'environnement nécessaires.
  */
 
-// Configuration MongoDB - MODIFIEZ CES VALEURS selon votre installation
-// URI pour MongoDB local (par défaut)
-const MONGODB_URI = 'mongodb://localhost:27017/nutritrack';
+// CONFIGURATION MONGODB - VOUS DEVEZ CONFIGURER CES VALEURS
 
-// Ou URI pour MongoDB Atlas (décommentez et personnalisez si vous utilisez Atlas)
-// const MONGODB_URI = 'mongodb+srv://username:password@clusterXXX.mongodb.net/nutritrack';
+// Il existe deux façons de configurer MongoDB:
+
+// OPTION 1: Créer un fichier .env à la racine du projet avec les variables suivantes:
+// MONGODB_URI=mongodb+srv://votreuser:votremotdepasse@votreinstance.mongodb.net/votrebdd
+// JWT_SECRET=votre-clé-secrète-très-complexe
+
+// OPTION 2: Définir directement les variables ci-dessous
+// (moins sécurisé, à utiliser uniquement pour les tests)
+
+// Connectez-vous à MongoDB Atlas (https://www.mongodb.com/cloud/atlas) et créez un cluster
+// Exemple pour MongoDB local (changez si vous utilisez MongoDB Atlas):
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/nutritrack';
+
+// Générez une clé secrète forte pour les tokens JWT
+const JWT_SECRET = process.env.JWT_SECRET || 'CHANGEZ-MOI-AVEC-UNE-CLE-SECURISEE';
 
 // Configuration de l'application
 process.env.MONGODB_URI = MONGODB_URI;
-process.env.JWT_SECRET = 'nutritrack-secret-key-2025';
-process.env.JWT_EXPIRE = '30d';
-process.env.JWT_COOKIE_EXPIRE = '30';
+if (!process.env.JWT_SECRET) {
+  process.env.JWT_SECRET = JWT_SECRET;
+  console.warn('⚠️ ATTENTION: Vous utilisez une clé JWT par défaut, ce qui est peu sécurisé.');
+  console.warn('Pour la production, définissez une clé secrète unique dans vos variables d\'environnement.');
+}
+process.env.JWT_EXPIRE = process.env.JWT_EXPIRE || '30d';
+process.env.JWT_COOKIE_EXPIRE = process.env.JWT_COOKIE_EXPIRE || '30';
 
 console.log('🔐 Configuration de l\'application chargée');
 console.log(`🔌 Tentative de connexion à MongoDB: ${MONGODB_URI}`);

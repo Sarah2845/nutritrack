@@ -240,6 +240,7 @@ git push origin nom-de-la-fonctionnalite
 - npm ou yarn
 - Git
 - Docker et Docker Compose (optionnel)
+- MongoDB (optionnel, pour le mode avancé)
 
 ### Clone et installation
 
@@ -259,6 +260,22 @@ npm start
 - URL: http://localhost:3001
 - Utilisateur test: utilisateur@test.com
 - Mot de passe: motdepasse
+
+### Configuration de MongoDB (optionnel)
+Par défaut, l'application utilise un stockage local JSON. Pour utiliser MongoDB :
+
+1. Créez un compte sur [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) ou installez MongoDB en local
+2. Créez un fichier `.env` à la racine du projet avec les variables suivantes :
+   ```
+   MONGODB_URI=mongodb+srv://votreuser:votremotdepasse@votreinstance.mongodb.net/votrebdd
+   JWT_SECRET=votre-clé-secrète-très-complexe
+   ```
+3. Démarrez l'application avec MongoDB :
+   ```bash
+   npm run start:mongodb
+   ```
+
+**IMPORTANT:** Ne partagez JAMAIS vos identifiants MongoDB dans le code source. Utilisez toujours des variables d'environnement ou un fichier `.env` (qui doit être ajouté à `.gitignore`).
 
 ### Fonctionnalités à tester
 - Ajout et suivi des repas
