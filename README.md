@@ -2,21 +2,73 @@
 
 NutriTrack est une application complète de suivi nutritionnel qui permet aux utilisateurs de suivre leurs apports alimentaires, définir des objectifs nutritionnels et analyser leurs habitudes alimentaires à l'aide de graphiques interactifs et de statistiques.
 
-## Dernières fonctionnalités implémentées (Avril 2025)
+## 📥 Installation et exécution
 
-### 1. Authentification et Sécurité
+### Option 1 : Exécution locale (Node.js)
+
+1. Cloner le dépôt :
+```bash
+git clone https://github.com/votre-utilisateur/nutritrack.git
+cd nutritrack
+```
+
+2. Installer les dépendances :
+```bash
+npm install
+```
+
+3. Démarrer le serveur local :
+```bash
+npm start
+```
+
+4. Accéder à l'application : http://localhost:3001
+
+### Option 2 : Utiliser Docker (recommandé pour les tests)
+
+1. Avec Docker Compose :
+```bash
+docker-compose up -d
+```
+
+2. Ou avec Docker directement :
+```bash
+docker build -t nutritrack .
+docker run -p 3001:3001 nutritrack
+```
+
+3. Accéder à l'application : http://localhost:3001
+
+## 🔥 Dernières améliorations (Avril 2025)
+
+### 1. Système de recommandations alimentaires 🍎
+- **Recommandations personnalisées** basées sur les objectifs nutritionnels
+- **Génération intelligente** d'alternatives en cas d'erreur de chargement
+- **Mise en cache côté client** pour améliorer la réactivité
+- **Gestion robuste des erreurs** pour une expérience utilisateur fluide
+
+### 2. Interface utilisateur améliorée 💻
+- **Navigation unifiée** entre toutes les sections
+- **Système de notification** intégré pour une meilleure communication
+- **Indicateurs de progression** visuels pour le suivi des objectifs
+- **Mise en page responsive** pour tous les appareils
+
+### 3. Architecture optimisée ⚙️
+- **Accès direct à la base de données** avec lowdb pour des performances améliorées
+- **En-têtes anti-cache** pour éviter les problèmes de données obsolètes
+- **Docker support** pour un déploiement simplifié
+- **Gestion des authentifications** plus robuste avec protection des routes
+
+### 4. Authentification et Sécurité 🔒
 - Système d'**authentification complet** avec inscription et connexion
 - **Gestion des sessions utilisateurs** via JWT (JSON Web Tokens)
 - Stockage sécurisé des mots de passe avec **hachage via bcrypt**
 - **Protection des routes API** avec middleware d'authentification
-- **Déconnexion sécurisée** avec invalidation des tokens
 
-### 2. Gestion de Profil Utilisateur
+### 5. Gestion de Profil Utilisateur 👤
 - **Page de profil complète** avec informations personnelles et préférences
 - **Upload de photo de profil** avec recadrage et redimensionnement
-- Fonctionnalité de **changement de mot de passe** sécurisée
 - **Personnalisation des objectifs nutritionnels** (calories, macronutriments)
-- Paramètres thématiques avec **option de mode sombre**
 - **Affichage cohérent** des informations utilisateur dans l'ensemble de l'application
 
 ## Fonctionnalités
@@ -143,6 +195,76 @@ const getProteinRichMeals = R.pipe(
   R.take(3)
 );
 ```
+
+## 🔄 Dépôt distant Git
+
+### Configuration initiale
+
+1. Créer un dépôt sur GitHub (sans README, .gitignore, ou licence) à l'adresse : https://github.com/new
+
+2. Lier votre dépôt local au dépôt distant :
+```bash
+git remote add origin https://github.com/votre-utilisateur/nutritrack.git
+```
+
+3. Pousser votre code vers le dépôt distant :
+```bash
+git push -u origin master
+```
+
+### Workflow Git recommandé
+
+1. Pour obtenir les dernières modifications :
+```bash
+git pull origin master
+```
+
+2. Pour ajouter vos modifications :
+```bash
+git add .
+git commit -m "Description des modifications"
+git push origin master
+```
+
+3. Pour créer une branche de fonctionnalité :
+```bash
+git checkout -b nom-de-la-fonctionnalite
+# Après développement et tests
+git push origin nom-de-la-fonctionnalite
+```
+
+## 📋 Instructions d'exécution pour les testeurs
+
+### Pré-requis
+- Node.js v18 ou supérieur
+- npm ou yarn
+- Git
+- Docker et Docker Compose (optionnel)
+
+### Clone et installation
+
+```bash
+# Cloner le dépôt
+git clone https://github.com/votre-utilisateur/nutritrack.git
+cd nutritrack
+
+# Installer les dépendances
+npm install
+
+# Démarrer l'application
+npm start
+```
+
+### Accès à l'application
+- URL: http://localhost:3001
+- Utilisateur test: utilisateur@test.com
+- Mot de passe: motdepasse
+
+### Fonctionnalités à tester
+- Ajout et suivi des repas
+- Système de recommandation alimentaire
+- Visualisation des statistiques
+- Navigation entre les différentes pages
 
 ## Licence
 MIT
