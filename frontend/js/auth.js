@@ -9,18 +9,19 @@ const Auth = (() => {
   const TOKEN_KEY = 'nutritrack_token';
   const USER_KEY = 'nutritrack_user';
   
-  // DOM Elements
+  // DOM Elements - Vérifier l'existence des éléments avant de les utiliser
   const authContainer = document.getElementById('authContainer');
-  const appContainer = document.getElementById('app');
+  const appContainer = document.getElementById('app'); // Peut ne pas exister sur la page de login
   const loginForm = document.getElementById('loginForm');
   const registerForm = document.getElementById('registerForm');
-  const usernameDisplay = document.getElementById('username');
-  const logoutBtn = document.getElementById('logoutBtn');
+  const usernameDisplay = document.getElementById('username'); // Peut ne pas exister sur la page de login
+  const logoutBtn = document.getElementById('logoutBtn'); // Peut ne pas exister sur la page de login
   
   // Event listeners
   const setupEventListeners = () => {
     // Login form submission
-    loginForm.addEventListener('submit', async (e) => {
+    if (loginForm) {
+      loginForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       
       try {
@@ -47,9 +48,11 @@ const Auth = (() => {
         Utils.hideSpinner();
       }
     });
+    }
     
     // Registration form submission
-    registerForm.addEventListener('submit', async (e) => {
+    if (registerForm) {
+      registerForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       
       try {
@@ -77,12 +80,15 @@ const Auth = (() => {
         Utils.hideSpinner();
       }
     });
+    }
     
     // Logout button
-    logoutBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      logout();
-    });
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        logout();
+      });
+    }
   };
   
   // Check if user is authenticated
@@ -122,14 +128,31 @@ const Auth = (() => {
   
   // Show the auth container, hide the app
   const showAuth = () => {
-    authContainer.classList.remove('hidden');
-    appContainer.style.display = 'none';
+    if (authContainer) {
+      authContainer.classList.remove('hidden');
+    }
+    if (appContainer) {
+      appContainer.style.display = 'none';
+    }
   };
   
   // Hide the auth container, show the app
   const showApp = () => {
-    authContainer.classList.add('hidden');
-    appContainer.style.display = 'block';
+    if (authContainer) {
+      authContainer.classList.add('hidden');
+    }
+    if (appContainer) {
+      appContainer.style.display = 'block';
+    } else {
+      // Si on est sur la page de login et qu'on est authentifié, permettre l'accès aux différentes pages
+      const currentPage = window.location.pathname;
+      
+      // Si on est sur la page de login ou la page d'accueil, rediriger vers le dashboard
+      if (currentPage.includes('login.html') || currentPage === '/' || currentPage.endsWith('index.html')) {
+        window.location.href = '/dashboard.html';
+      }
+      // Sinon, rester sur la page actuelle (meal-planner.html, etc.)
+    }
   };
   
   // Logout user
@@ -150,8 +173,27 @@ const Auth = (() => {
     if (isAuthenticated()) {
       const user = getCurrentUser();
       updateUIForAuthenticatedUser(user);
+      
+      // Vérifier si nous sommes sur la page de login
+      if (window.location.pathname.includes('login.html')) {
+        // Rediriger vers le dashboard si déjà connecté
+        window.location.href = '/dashboard.html';
+        return;
+      }
+      
       showApp();
     } else {
+      // Si non authentifié et pas sur les pages autorisées, rediriger
+      const allowedPages = ['login.html', 'index.html', '/'];
+      const isAllowedPage = allowedPages.some(page => 
+        window.location.pathname.includes(page) || window.location.pathname.endsWith(page)
+      );
+      
+      if (!isAllowedPage) {
+        window.location.href = '/login.html';
+        return;
+      }
+      
       showAuth();
     }
   };

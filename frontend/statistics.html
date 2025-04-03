@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NutriTrack - Statistiques Nutritionnelles</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
+    <style>
+        body {
+            background-color: #f8f9fc;
+            font-family: 'Nunito', 'Segoe UI', sans-serif;
+            padding-top: 56px;
+        }
+        .sidebar {
+            position: fixed;
+            top: 56px;
+            left: 0;
+            width: 225px;
+            height: calc(100vh - 56px);
+            background-color: #4e73df;
+            background-image: linear-gradient(180deg, #4e73df 10%, #224abe 100%);
+            padding-top: 20px;
+            z-index: 1;
+        }
+        .sidebar-link {
+            display: block;
+            padding: 10px 15px;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            border-left: 3px solid transparent;
+        }
+        .sidebar-link:hover, .sidebar-link.active {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-left-color: white;
+        }
+        .sidebar-link i {
+            margin-right: 10px;
+        }
+        .content {
+            margin-left: 225px;
+            padding: 20px;
+        }
+        .card {
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+            border: none;
+            border-radius: 0.35rem;
+            margin-bottom: 20px;
+        }
+        .card-header {
+            background-color: #f8f9fc;
+            border-bottom: 1px solid #e3e6f0;
+            padding: 0.75rem 1.25rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .stat-card {
+            transition: all 0.3s ease;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0.5rem 2rem 0 rgba(58, 59, 69, 0.2);
+        }
+        .border-left-primary {
+            border-left: 0.25rem solid #4e73df !important;
+        }
+        .border-left-success {
+            border-left: 0.25rem solid #1cc88a !important;
+        }
+        .border-left-info {
+            border-left: 0.25rem solid #36b9cc !important;
+        }
+        .border-left-warning {
+            border-left: 0.25rem solid #f6c23e !important;
+        }
+        .border-left-danger {
+            border-left: 0.25rem solid #e74a3b !important;
+        }
+        .shadow {
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15) !important;
+        }
+        .mobile-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: white;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            display: none;
+            z-index: 10;
+        }
+        .mobile-nav-item {
+            text-align: center;
+            padding: 10px 0;
+            color: #5a5c69;
+            text-decoration: none;
+            font-size: 0.7rem;
+        }
+        .mobile-nav-item i {
+            display: block;
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+        .mobile-nav-item.active {
+            color: #4e73df;
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+            .content {
+                margin-left: 0;
+                margin-bottom: 70px;
+            }
+            .mobile-nav {
+                display: flex;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#"><i class="bi bi-heart-pulse"></i> NutriTrack</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="notificationsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-bell"></i>
+                            <span class="badge bg-danger badge-counter">3</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationsDropdown">
+                            <li><a class="dropdown-item" href="#">Nouvelle fonctionnalité disponible</a></li>
+                            <li><a class="dropdown-item" href="#">Vous avez atteint votre objectif protéines</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#">Voir toutes les notifications</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="d-none d-lg-inline me-2 text-light" id="navUsername">Utilisateur Test</span>
+                            <img id="navAvatar" class="rounded-circle" src="https://via.placeholder.com/40" alt="Photo de profil" width="32" height="32">
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="profile.html"><i class="bi bi-person me-2"></i>Profil</a></li>
+                            <li><a class="dropdown-item" href="settings.html"><i class="bi bi-gear me-2"></i>Paramètres</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" id="logoutBtn"><i class="bi bi-box-arrow-right me-2"></i>Déconnexion</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <a href="/dashboard.html" class="sidebar-link active"><i class="bi bi-speedometer2"></i> Tableau de bord</a>
+        <a href="/meals.html" class="sidebar-link"><i class="bi bi-journal-plus"></i> Repas</a>
+        <a href="/meal-planner.html" class="sidebar-link"><i class="bi bi-calendar-week"></i> Planification</a>
+        <a href="/objectives.html" class="sidebar-link"><i class="bi bi-trophy"></i> Objectifs</a>
+        <a href="/recommendations.html" class="sidebar-link"><i class="bi bi-lightbulb"></i> Recommandations</a>
+        <a href="/progress.html" class="sidebar-link"><i class="bi bi-graph-up"></i> Progression</a>
+        <a href="/statistics.html" class="sidebar-link"><i class="bi bi-bar-chart"></i> Statistiques</a>
+        <a href="/profile.html" class="sidebar-link"><i class="bi bi-person"></i> Profil</a>
+        <hr class="sidebar-divider bg-white mx-3 opacity-25">
+    </div>
+
+    <!-- Mobile Navigation -->
+    <div class="mobile-nav row g-0">
+        <div class="col">
+            <a href="dashboard.html" class="mobile-nav-item d-block"><i class="bi bi-speedometer2"></i>Tableau</a>
+        </div>
+        <div class="col">
+            <a href="meals.html" class="mobile-nav-item d-block"><i class="bi bi-egg-fried"></i>Repas</a>
+        </div>
+        <div class="col">
+            <a href="meal-planner.html" class="mobile-nav-item d-block"><i class="bi bi-calendar-check"></i>Planning</a>
+        </div>
+        <div class="col">
+            <a href="statistics.html" class="mobile-nav-item active d-block"><i class="bi bi-bar-chart"></i>Stats</a>
+        </div>
+        <div class="col">
+            <a href="profile.html" class="mobile-nav-item d-block"><i class="bi bi-person"></i>Profil</a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content">
+        <div class="container-fluid">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="h3 text-gray-800">Statistiques Nutritionnelles</h1>
+                <div>
+                    <button id="btnExportStats" class="btn btn-outline-primary">
+                        <i class="bi bi-download"></i> Exporter les statistiques
+                    </button>
+                </div>
+            </div>
+
+            <!-- Résumé des statistiques -->
+            <div class="row mb-4">
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card border-left-primary shadow h-100 py-2 stat-card">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Moyenne quotidienne</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800" id="avgCaloriesPerDay">2100 kcal</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="bi bi-lightning-charge text-gray-300 fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card border-left-success shadow h-100 py-2 stat-card">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Jours dans l'objectif</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800" id="daysOnTarget">24/30</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="bi bi-calendar-check text-gray-300 fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card border-left-info shadow h-100 py-2 stat-card">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Répartition macro</div>
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col-auto">
+                                            <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800" id="macroRatio">15/55/30</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="bi bi-pie-chart text-gray-300 fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card border-left-warning shadow h-100 py-2 stat-card">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Meilleur jour</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800" id="bestDay">Mercredi</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="bi bi-trophy text-gray-300 fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Graphiques statistiques -->
+            <div class="row">
+                <!-- Consommation moyenne par repas -->
+                <div class="col-lg-6 mb-4">
+                    <div class="card shadow">
+                        <div class="card-header">
+                            <i class="bi bi-bar-chart-line me-1"></i> Consommation moyenne par repas
+                        </div>
+                        <div class="card-body">
+                            <canvas id="mealTypeChart" height="300"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Répartition des macronutriments -->
+                <div class="col-lg-6 mb-4">
+                    <div class="card shadow">
+                        <div class="card-header">
+                            <i class="bi bi-pie-chart-fill me-1"></i> Répartition des macronutriments
+                        </div>
+                        <div class="card-body">
+                            <canvas id="macroDistributionChart" height="300"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Calories par jour de la semaine -->
+                <div class="col-lg-8 mb-4">
+                    <div class="card shadow">
+                        <div class="card-header">
+                            <i class="bi bi-calendar-week me-1"></i> Calories par jour de la semaine
+                        </div>
+                        <div class="card-body">
+                            <canvas id="weekdayCaloriesChart" height="300"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Top 5 des aliments consommés -->
+                <div class="col-lg-4 mb-4">
+                    <div class="card shadow">
+                        <div class="card-header">
+                            <i class="bi bi-list-ol me-1"></i> Top 5 des aliments
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="topFoodsTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Aliment</th>
+                                            <th>Calories</th>
+                                            <th>Fréquence</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Poulet grillé</td>
+                                            <td>165 kcal</td>
+                                            <td>12</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Riz brun</td>
+                                            <td>112 kcal</td>
+                                            <td>10</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Œufs</td>
+                                            <td>78 kcal</td>
+                                            <td>8</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Avocat</td>
+                                            <td>160 kcal</td>
+                                            <td>7</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Yaourt grec</td>
+                                            <td>100 kcal</td>
+                                            <td>7</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Comparaison objectifs vs réalité -->
+            <div class="card shadow mb-4">
+                <div class="card-header">
+                    <i class="bi bi-bar-chart-steps me-1"></i> Comparaison objectifs vs réalité
+                </div>
+                <div class="card-body">
+                    <canvas id="goalsVsActualChart" height="300"></canvas>
+                </div>
+            </div>
+
+            <!-- Tendances et performances -->
+            <div class="row">
+                <div class="col-lg-6 mb-4">
+                    <div class="card shadow">
+                        <div class="card-header">
+                            <i class="bi bi-graph-up me-1"></i> Tendance poids (si suivi)
+                        </div>
+                        <div class="card-body">
+                            <canvas id="weightTrendChart" height="250"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 mb-4">
+                    <div class="card shadow">
+                        <div class="card-header">
+                            <i class="bi bi-graph-up-arrow me-1"></i> Performance nutritionnelle
+                        </div>
+                        <div class="card-body">
+                            <canvas id="performanceChart" height="250"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notifications -->
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+        <div id="notification" class="toast align-items-center text-white bg-success" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    Notification message
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/statistics.js"></script>
+    <script src="js/chart-fix.js"></script>
+</body>
+</html>

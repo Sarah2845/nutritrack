@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NutriTrack - Recommandations Alimentaires</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
+    <style>
+        body {
+            background-color: #f8f9fc;
+            font-family: 'Nunito', 'Segoe UI', sans-serif;
+            padding-top: 56px;
+        }
+        .sidebar {
+            position: fixed;
+            top: 56px;
+            left: 0;
+            width: 225px;
+            height: calc(100vh - 56px);
+            background-color: #4e73df;
+            background-image: linear-gradient(180deg, #4e73df 10%, #224abe 100%);
+            padding-top: 20px;
+            z-index: 1;
+        }
+        .sidebar-link {
+            display: block;
+            padding: 10px 15px;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            border-left: 3px solid transparent;
+        }
+        .sidebar-link:hover, .sidebar-link.active {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-left-color: white;
+        }
+        .sidebar-link i {
+            margin-right: 10px;
+        }
+        .content {
+            margin-left: 225px;
+            padding: 20px;
+        }
+        .card {
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+            border: none;
+            border-radius: 0.35rem;
+            margin-bottom: 20px;
+        }
+        .card-header {
+            background-color: #f8f9fc;
+            border-bottom: 1px solid #e3e6f0;
+            padding: 0.75rem 1.25rem;
+            display: flex;
+            align-items: center;
+        }
+        .food-card {
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+        .food-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0.5rem 2rem 0 rgba(58, 59, 69, 0.25);
+        }
+        .food-image {
+            height: 160px;
+            object-fit: cover;
+        }
+        .recommendation-card {
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #4e73df;
+        }
+        .recommendation-type-protein {
+            border-left-color: #36b9cc;
+        }
+        .recommendation-type-carbs {
+            border-left-color: #1cc88a;
+        }
+        .recommendation-type-fats {
+            border-left-color: #f6c23e;
+        }
+        .recommendation-type-vitamins {
+            border-left-color: #e74a3b;
+        }
+        .nutrient-badge {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+            display: inline-block;
+        }
+        .protein-badge {
+            background-color: rgba(54, 185, 204, 0.15);
+            color: #36b9cc;
+        }
+        .carbs-badge {
+            background-color: rgba(28, 200, 138, 0.15);
+            color: #1cc88a;
+        }
+        .fats-badge {
+            background-color: rgba(246, 194, 62, 0.15);
+            color: #f6c23e;
+        }
+        .vitamins-badge {
+            background-color: rgba(231, 74, 59, 0.15);
+            color: #e74a3b;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#"><i class="bi bi-heart-pulse"></i> NutriTrack</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="dashboard.html">Tableau de bord</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img id="userAvatar" src="https://via.placeholder.com/30" alt="Avatar" class="rounded-circle me-1" width="30" height="30">
+                            <span id="userName">Utilisateur</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="profile.html"><i class="bi bi-person me-2"></i> Profil</a></li>
+                            <li><a class="dropdown-item" href="settings.html"><i class="bi bi-gear me-2"></i> Paramètres</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" id="logoutBtn"><i class="bi bi-box-arrow-right me-2"></i> Déconnexion</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <a href="/dashboard.html" class="sidebar-link active"><i class="bi bi-speedometer2"></i> Tableau de bord</a>
+        <a href="/meals.html" class="sidebar-link"><i class="bi bi-journal-plus"></i> Repas</a>
+        <a href="/meal-planner.html" class="sidebar-link"><i class="bi bi-calendar-week"></i> Planification</a>
+        <a href="/objectives.html" class="sidebar-link"><i class="bi bi-trophy"></i> Objectifs</a>
+        <a href="/recommendations.html" class="sidebar-link"><i class="bi bi-lightbulb"></i> Recommandations</a>
+        <a href="/progress.html" class="sidebar-link"><i class="bi bi-graph-up"></i> Progression</a>
+        <a href="/statistics.html" class="sidebar-link"><i class="bi bi-bar-chart"></i> Statistiques</a>
+        <a href="/profile.html" class="sidebar-link"><i class="bi bi-person"></i> Profil</a>
+        <hr class="sidebar-divider bg-white mx-3 opacity-25">
+    </div>
+
+    <div class="content">
+        <div class="container-fluid">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="h3 text-gray-800">Recommandations Alimentaires Personnalisées</h1>
+                <div>
+                    <button id="btnRefreshRecommendations" class="btn btn-outline-primary">
+                        <i class="bi bi-arrow-clockwise me-1"></i> Actualiser
+                    </button>
+                </div>
+            </div>
+
+            <!-- Résumé des objectifs -->
+            <div class="row mb-4">
+                <div class="col-lg-12">
+                    <div class="card shadow">
+                        <div class="card-header">
+                            <i class="bi bi-bullseye me-1"></i> Vos objectifs nutritionnels
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-3 col-sm-6 mb-3">
+                                    <div class="card border-left-primary shadow h-100 py-2">
+                                        <div class="card-body">
+                                            <div class="row no-gutters align-items-center">
+                                                <div class="col mr-2">
+                                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Calories</div>
+                                                    <div class="h5 mb-0 font-weight-bold text-gray-800" id="caloriesGoal">2000 kcal</div>
+                                                </div>
+                                                <div class="col-auto">
+                                                    <i class="bi bi-lightning-charge h3 text-gray-300"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3 col-sm-6 mb-3">
+                                    <div class="card border-left-info shadow h-100 py-2">
+                                        <div class="card-body">
+                                            <div class="row no-gutters align-items-center">
+                                                <div class="col mr-2">
+                                                    <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Protéines</div>
+                                                    <div class="h5 mb-0 font-weight-bold text-gray-800" id="proteinGoal">120 g</div>
+                                                </div>
+                                                <div class="col-auto">
+                                                    <i class="bi bi-egg h3 text-gray-300"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3 col-sm-6 mb-3">
+                                    <div class="card border-left-success shadow h-100 py-2">
+                                        <div class="card-body">
+                                            <div class="row no-gutters align-items-center">
+                                                <div class="col mr-2">
+                                                    <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Glucides</div>
+                                                    <div class="h5 mb-0 font-weight-bold text-gray-800" id="carbsGoal">250 g</div>
+                                                </div>
+                                                <div class="col-auto">
+                                                    <i class="bi bi-basket2 h3 text-gray-300"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3 col-sm-6 mb-3">
+                                    <div class="card border-left-warning shadow h-100 py-2">
+                                        <div class="card-body">
+                                            <div class="row no-gutters align-items-center">
+                                                <div class="col mr-2">
+                                                    <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Lipides</div>
+                                                    <div class="h5 mb-0 font-weight-bold text-gray-800" id="fatGoal">70 g</div>
+                                                </div>
+                                                <div class="col-auto">
+                                                    <i class="bi bi-droplet h3 text-gray-300"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progrès actuel -->
+            <div class="row mb-4">
+                <div class="col-lg-12">
+                    <div class="card shadow">
+                        <div class="card-header">
+                            <i class="bi bi-bar-chart me-1"></i> Votre progression actuelle
+                        </div>
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-lg-3 col-md-6 mb-4">
+                                    <h5 class="small font-weight-bold">Calories <span class="float-end" id="caloriesPercent">80%</span></h5>
+                                    <div class="progress mb-4" style="height: 10px;">
+                                        <div class="progress-bar bg-primary" role="progressbar" id="caloriesProgressBar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-6 mb-4">
+                                    <h5 class="small font-weight-bold">Protéines <span class="float-end" id="proteinPercent">95%</span></h5>
+                                    <div class="progress mb-4" style="height: 10px;">
+                                        <div class="progress-bar bg-info" role="progressbar" id="proteinProgressBar" style="width: 95%" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-6 mb-4">
+                                    <h5 class="small font-weight-bold">Glucides <span class="float-end" id="carbsPercent">70%</span></h5>
+                                    <div class="progress mb-4" style="height: 10px;">
+                                        <div class="progress-bar bg-success" role="progressbar" id="carbsProgressBar" style="width: 70%" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-6 mb-4">
+                                    <h5 class="small font-weight-bold">Lipides <span class="float-end" id="fatPercent">65%</span></h5>
+                                    <div class="progress mb-4" style="height: 10px;">
+                                        <div class="progress-bar bg-warning" role="progressbar" id="fatProgressBar" style="width: 65%" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recommandations -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card shadow mb-4">
+                        <div class="card-header">
+                            <i class="bi bi-lightbulb me-1"></i> Recommandations basées sur vos objectifs
+                        </div>
+                        <div class="card-body">
+                            <!-- Aucune alerte d'erreur, uniquement l'interface de chargement -->
+                            <div id="recommendationsContainer">
+                                <!-- Les recommandations seront chargées dynamiquement ici -->
+                                <div class="text-center py-5">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="visually-hidden">Chargement...</span>
+                                    </div>
+                                    <p class="mt-3">Chargement des recommandations...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Aliments recommandés -->
+            <div class="row" id="recommendedFoodsContainer">
+                <!-- Les aliments recommandés seront chargés dynamiquement ici -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de détails de l'aliment -->
+    <div class="modal fade" id="foodDetailModal" tabindex="-1" aria-labelledby="foodDetailModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="foodDetailModalLabel">Détails de l'aliment</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="foodDetailContent">
+                    <!-- Contenu du détail de l'aliment sera chargé ici -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="addToMealPlanBtn">Ajouter au plan de repas</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notifications -->
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+        <div id="notification" class="toast align-items-center text-white bg-success" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    Notification message
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/recommendations.js"></script>
+</body>
+</html>

@@ -15,9 +15,11 @@ const initializeDatabase = () => {
 
 // On essaie de charger la configuration MongoDB
 let connectDB = null;
+let mongoEnabled = false;
 try {
   connectDB = require('./config/db');
   console.log('Module MongoDB trouvé');
+  mongoEnabled = process.env.MONGODB_URI && process.env.MONGODB_URI !== 'undefined';
 } catch (err) {
   console.log('Module MongoDB non trouvé, fonctionnement en mode local');
 }
@@ -49,6 +51,16 @@ app.get('/test-server', (req, res) => {
 
 // Routes API
 app.use('/api/users', require('./routes/userRoutes'));
+app.use('/api/meals', require('./routes/meals.routes'));
+
+// Charger les routes de statistiques et d'objectifs si disponibles
+try {
+  app.use('/api/stats', require('./routes/stats.routes'));
+  app.use('/api/goals', require('./routes/goals.routes'));
+  console.log('Routes secondaires chargées (stats, goals)');
+} catch (err) {
+  console.log('Routes secondaires non trouvées ou incomplètes');
+}
 
 // Vérifions si les routes d'authentification MongoDB existent
 let authRoutes;
